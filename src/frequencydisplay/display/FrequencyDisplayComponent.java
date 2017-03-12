@@ -3,21 +3,19 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package frequencydisplay;
+package frequencydisplay.display;
 
+import frequencydisplay.data.FrequencyBand;
 import java.awt.Color;
 import java.awt.FontMetrics;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
-import java.awt.geom.AffineTransform;
 import java.awt.geom.Point2D;
 import java.awt.geom.Rectangle2D;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import javax.swing.JComponent;
 
 /**
@@ -27,35 +25,24 @@ import javax.swing.JComponent;
 public class FrequencyDisplayComponent {
     JFrequencyDisplay m_component;
     
-    /** Map of center frequencies to bands. */
-    Map<Integer, FrequencyBand> m_bandMap;
-    
     public FrequencyDisplayComponent() {
-        m_bandMap = new HashMap<>();
     }
     
     public void initialize() {
         m_component = new JFrequencyDisplay(0, 1000);
     }
     
-    public void addBand(int centerFreq, int bandwidth) {
-        System.out.println("Display Adding band at freq: " + centerFreq);
-        
-        
-        FrequencyBand band = new FrequencyBand(centerFreq, bandwidth);
-        m_bandMap.put(centerFreq, band);
+    public void addBand(FrequencyBand band) {
+        System.out.println("Display Adding band: " + band);
         m_component.addBand(band);
     }
     
-    public void removeBand(int centerFreq) {
-        if (m_bandMap.containsKey(centerFreq)) {
-            m_component.removeBand(m_bandMap.get(centerFreq));
-        }
+    public void removeBand(FrequencyBand band) {
+        m_component.removeBand(band);
     }
     
     public void clearAllBands() {
         m_component.removeAllBands();
-        m_bandMap.clear();
     }
     
     public JComponent getComponent() {
@@ -174,7 +161,7 @@ public class FrequencyDisplayComponent {
             //Draw Bands
             for (FrequencyBand band : m_bands) {
                 System.out.println("Drawing band: " + band);
-                g2d.setColor(Color.BLUE);
+                g2d.setColor(Color.GREEN);
                 g2d.fillRect(band.getStartFreq(), virtualGraphHeight - BAND_HEIGHT, band.getBandwidth(), 50);
             }
         }

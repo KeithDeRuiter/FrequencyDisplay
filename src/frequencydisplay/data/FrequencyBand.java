@@ -3,13 +3,13 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package frequencydisplay;
+package frequencydisplay.data;
 
 /**
  *
  * @author Keith
  */
-class FrequencyBand {
+public class FrequencyBand {
     private final int m_centerFreq;
     private final int m_bandwidth;
 
