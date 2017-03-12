@@ -6,6 +6,7 @@
 package frequencydisplay;
 
 import frequencydisplay.controller.DisplayController;
+import frequencydisplay.model.AppModel;
 import frequencydisplay.model.Model;
 import frequencydisplay.view.AppView;
 
@@ -20,7 +21,7 @@ public class FrequencyDisplay {
      */
     public static void main(String[] args) {
         //Model
-        Model model = null;
+        Model model = new AppModel();
         
         //View
         AppView view = new AppView();

@@ -12,6 +12,7 @@ import frequencydisplay.data.Platform;
  * @author Keith
  */
 public interface View {
+    public void initialize();
     public void showView();
     public void hideView();
     public void addPlatformToList(Platform platform);

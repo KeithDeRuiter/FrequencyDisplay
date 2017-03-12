@@ -39,6 +39,7 @@ public class PlatformTable {
         m_table.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
         m_table.setRowSelectionAllowed(true);
         m_table.setColumnSelectionAllowed(false);
+        m_table.getTableHeader().setReorderingAllowed(false);
         m_table.getSelectionModel().addListSelectionListener(new ListSelectionListener() {
             
             private Platform previousSelection;

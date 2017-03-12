@@ -41,6 +41,7 @@ public class AppView implements View {
     public AppView() {
     }
     
+    @Override
     public void initialize() {
         m_frame = new JFrame(WINDOW_TITLE);
         m_frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -57,8 +58,6 @@ public class AppView implements View {
         //Table
         table = new PlatformTable();
         table.initialize();
-        table.addPlatform(SamplePlatformDatabase.A_CLASS);
-        table.addPlatform(SamplePlatformDatabase.B_CLASS);
         m_frame.add(table.getComponent(), BorderLayout.CENTER);
 
         //Add listener so bands wil be displayed when a platform is selected
@@ -139,11 +138,13 @@ public class AppView implements View {
         m_frame.add(controlPanel, BorderLayout.NORTH);
     }
     
+    @Override
     public void showView() {
         m_frame.pack();
         m_frame.setVisible(true);
     }
     
+    @Override
     public void hideView() {
         m_frame.setVisible(false);
     }

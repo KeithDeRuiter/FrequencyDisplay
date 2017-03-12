@@ -7,16 +7,14 @@ package frequencydisplay.display;
 
 import frequencydisplay.data.Platform;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
-import javax.swing.table.DefaultTableModel;
+import javax.swing.table.AbstractTableModel;
 
 /**
  *
  * @author Keith
  */
-public class PlatformTableModel extends DefaultTableModel {
+public class PlatformTableModel extends AbstractTableModel {
     private final String[] COLUMN_NAMES = {
         "Class",
         "Freq 1",
@@ -28,17 +26,21 @@ public class PlatformTableModel extends DefaultTableModel {
         "TPK"
     };
     
-    private final Map<String, Platform> m_platformClassMap;
-
+    private final List<Platform> m_data;
+    
+    
     public PlatformTableModel() {
-        m_platformClassMap = new HashMap<>();
+        m_data = new ArrayList<>();
     }
     
-    
-
     @Override
     public int getColumnCount() {
         return COLUMN_NAMES.length;
+    }
+    
+    @Override
+    public int getRowCount() {
+        return m_data.size();
     }
 
     @Override
@@ -46,6 +48,35 @@ public class PlatformTableModel extends DefaultTableModel {
         return COLUMN_NAMES[col];
     }
 
+    @Override
+    public Object getValueAt(int row, int col) {
+        Platform p = m_data.get(row);
+        
+        Object val = null;
+        switch (col) {
+            case 0:
+                val = p.getPlatformClass();
+                break;
+            case 1:
+            case 2:
+            case 3:
+            case 4:
+            case 5:
+                if (p.getFrequencies().size() >= col) {
+                    val = p.getFrequencies().get(col - 1);
+                }
+                break;
+            case 6:
+                val = p.getNumBlades();
+                break;
+            case 7:
+                val = p.getTurnsPerKnot();
+                break;
+        }
+        
+        return val;
+    }
+    
     @Override
     public Class getColumnClass(int c) {
         return getValueAt(0, c).getClass();
@@ -56,45 +87,13 @@ public class PlatformTableModel extends DefaultTableModel {
         return false;
     }
     
-    
     public void addPlatformRow(Platform platform) {
-        m_platformClassMap.put(platform.getPlatformClass(), platform);
-        addRow(getTableRowForPlatform(platform));
+        m_data.add(platform);    
+        
+        fireTableRowsInserted(getRowCount(), getRowCount());
     }
     
     public Platform getPlatformAtIndex(int i) {
-        String c = (String)getValueAt(i, 0);  //Use the class as the key to lookup the platform in the map
-        return m_platformClassMap.get(c);
+        return m_data.get(i);
     }
-    
-    public static Object[] getTableRowForPlatform(Platform p) {
-        List<Object> rowList = new ArrayList<>();
-        
-        //Class
-        rowList.add(p.getPlatformClass());
-        
-        //5 Frequencies
-        List<Integer> freqs = p.getFrequencies();
-        for (int i = 0; i < 5 ; i++) {
-            if (i < freqs.size()) {
-                rowList.add(freqs.get(i));
-            } else {
-                //Default value if there are not enough frequencies
-                rowList.add(null);
-            }
-        }
-        
-        //Number of Blades
-        rowList.add(p.getNumBlades());
-        
-        //Turns Per Knot
-        rowList.add(p.getTurnsPerKnot());
-        
-        Object[] rowArray = new Object[rowList.size()];
-        rowArray = rowList.toArray(rowArray);
-        
-        return rowArray;
-    }
-    
-    
 }

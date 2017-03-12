@@ -5,13 +5,15 @@
  */
 package frequencydisplay.model;
 
+import frequencydisplay.data.Platform;
+
 /**
  *
  * @author Keith
  */
 public interface ModelListener {
-    public void platformAdded();
-    public void platformRemoved();
+    public void platformAdded(final Platform p);
+    public void platformRemoved(final Platform p);
     public void searchParametersAdded();
     public void searchParametersRemoved();
 }
