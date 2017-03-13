@@ -113,61 +113,61 @@ public class AppView implements View {
         
         m_frame.add(searchParamsPanel, BorderLayout.EAST);
         
-        //Control panel
-        JPanel controlPanel = new JPanel();
-        
-        controlPanel.add(new JLabel("Freq (Hz): "));
-        
-        final JFormattedTextField freqField = new JFormattedTextField(NumberFormat.getIntegerInstance());
-        freqField.setColumns(7);
-        controlPanel.add(freqField);
-        
-        controlPanel.add(new JLabel("Width (Hz): "));
-        
-        final JFormattedTextField bwField = new JFormattedTextField(NumberFormat.getIntegerInstance());
-        bwField.setColumns(7);
-        controlPanel.add(bwField);
-        
-        JButton addButton = new JButton("Add");
-        addButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                try {
-                    int freq = Integer.valueOf(freqField.getText());
-                    int bw = Integer.valueOf(bwField.getText());
-                    FrequencyBand band = new FrequencyBand(freq, bw, 40);
-                    freqComponent.addTargetBand(band);
-                } catch (NumberFormatException ex) {
-                    // ignore
-                }
-            }
-        });
-        controlPanel.add(addButton);
-        
-        JButton removeButton = new JButton("Remove");
-        removeButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                try {
-                    int freq = Integer.valueOf(freqField.getText());
-                    
-                } catch (NumberFormatException ex) {
-                    // ignore
-                }
-            }
-        });
-        controlPanel.add(removeButton);
-        
-        JButton clearButton = new JButton("Clear");
-        clearButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                freqComponent.clearAllBands();
-            }
-        });
-        controlPanel.add(clearButton);
-        
-        m_frame.add(controlPanel, BorderLayout.NORTH);
+//        //Control panel
+//        JPanel controlPanel = new JPanel();
+//        
+//        controlPanel.add(new JLabel("Freq (Hz): "));
+//        
+//        final JFormattedTextField freqField = new JFormattedTextField(NumberFormat.getIntegerInstance());
+//        freqField.setColumns(7);
+//        controlPanel.add(freqField);
+//        
+//        controlPanel.add(new JLabel("Width (Hz): "));
+//        
+//        final JFormattedTextField bwField = new JFormattedTextField(NumberFormat.getIntegerInstance());
+//        bwField.setColumns(7);
+//        controlPanel.add(bwField);
+//        
+//        JButton addButton = new JButton("Add");
+//        addButton.addActionListener(new ActionListener() {
+//            @Override
+//            public void actionPerformed(ActionEvent e) {
+//                try {
+//                    int freq = Integer.valueOf(freqField.getText());
+//                    int bw = Integer.valueOf(bwField.getText());
+//                    FrequencyBand band = new FrequencyBand(freq, bw, 40);
+//                    freqComponent.addTargetBand(band);
+//                } catch (NumberFormatException ex) {
+//                    // ignore
+//                }
+//            }
+//        });
+//        controlPanel.add(addButton);
+//        
+//        JButton removeButton = new JButton("Remove");
+//        removeButton.addActionListener(new ActionListener() {
+//            @Override
+//            public void actionPerformed(ActionEvent e) {
+//                try {
+//                    int freq = Integer.valueOf(freqField.getText());
+//                    
+//                } catch (NumberFormatException ex) {
+//                    // ignore
+//                }
+//            }
+//        });
+//        controlPanel.add(removeButton);
+//        
+//        JButton clearButton = new JButton("Clear");
+//        clearButton.addActionListener(new ActionListener() {
+//            @Override
+//            public void actionPerformed(ActionEvent e) {
+//                freqComponent.clearAllBands();
+//            }
+//        });
+//        controlPanel.add(clearButton);
+//        
+//        m_frame.add(controlPanel, BorderLayout.NORTH);
     }
     
     @Override
