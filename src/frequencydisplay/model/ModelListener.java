@@ -6,6 +6,7 @@
 package frequencydisplay.model;
 
 import frequencydisplay.data.Platform;
+import frequencydisplay.data.SearchParameters;
 
 /**
  *
@@ -14,6 +15,6 @@ import frequencydisplay.data.Platform;
 public interface ModelListener {
     public void platformAdded(final Platform p);
     public void platformRemoved(final Platform p);
-    public void searchParametersAdded();
-    public void searchParametersRemoved();
+    public void searchParametersAdded(final SearchParameters searchParameters);
+    public void searchParametersRemoved(final SearchParameters searchParameters);
 }

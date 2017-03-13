@@ -7,11 +7,13 @@ package frequencydisplay.view;
 
 import frequencydisplay.data.FrequencyBand;
 import frequencydisplay.data.Platform;
-import frequencydisplay.data.SamplePlatformDatabase;
-import frequencydisplay.display.FrequencyDisplayComponent;
-import frequencydisplay.display.PlatformSelectionEvent;
-import frequencydisplay.display.PlatformSelectionListener;
-import frequencydisplay.display.PlatformTable;
+import frequencydisplay.view.display.FrequencyDisplayComponent;
+import frequencydisplay.view.display.PlatformSelectionEvent;
+import frequencydisplay.view.display.PlatformSelectionListener;
+import frequencydisplay.view.display.PlatformTableDisplay;
+import frequencydisplay.view.display.SearchParametersDisplay;
+import frequencydisplay.view.display.SearchParametersSelectionEvent;
+import frequencydisplay.view.display.SearchParametersSelectionListener;
 import java.awt.BorderLayout;
 import java.awt.Dimension;
 import java.awt.event.ActionEvent;
@@ -19,6 +21,7 @@ import java.awt.event.ActionListener;
 import java.text.NumberFormat;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 import javax.swing.JButton;
 import javax.swing.JComponent;
 import javax.swing.JFormattedTextField;
@@ -36,7 +39,7 @@ public class AppView implements View {
     private final String WINDOW_TITLE = "Frequency Display";
 
     private FrequencyDisplayComponent freqComponent;
-    private PlatformTable table;
+    private PlatformTableDisplay table;
     
     public AppView() {
     }
@@ -56,30 +59,59 @@ public class AppView implements View {
         m_frame.add(fd, BorderLayout.SOUTH);
         
         //Table
-        table = new PlatformTable();
+        table = new PlatformTableDisplay();
         table.initialize();
         m_frame.add(table.getComponent(), BorderLayout.CENTER);
 
         //Add listener so bands wil be displayed when a platform is selected
         table.addPlatformSelectionListener(new PlatformSelectionListener() {
-            List<FrequencyBand> currentlySelectedBands = new ArrayList<>();
+            List<UUID> currentlySelectedBands = new ArrayList<>();
             
             @Override
-            public void platformSelectionChanged(PlatformSelectionEvent event) {
+            public void selectionChanged(PlatformSelectionEvent event) {
                 //Clear old bands
-                for (FrequencyBand b : currentlySelectedBands) {
-                    freqComponent.removeBand(b);
+                for (UUID id : currentlySelectedBands) {
+                    freqComponent.removeBand(id);
                 }
                 currentlySelectedBands.clear();
                 
                 //Add new bands
                 for (Integer freq : event.getNewlySelectedPlatform().getFrequencies()) {
-                    FrequencyBand band = new FrequencyBand(freq, 1);
-                    currentlySelectedBands.add(band);
-                    freqComponent.addBand(band);
+                    FrequencyBand band = new FrequencyBand(freq, 3, 50);
+                    UUID id = freqComponent.addTargetBand(band);
+                    currentlySelectedBands.add(id);
                 }
             }
         });
+        
+        //Search Parameters
+        SearchParametersDisplay spDisplay = new SearchParametersDisplay();
+        spDisplay.initialize();
+        spDisplay.addSearchParametersSelectionListener(new SearchParametersSelectionListener() {
+            List<UUID> currentlySearchBands = new ArrayList<>();
+            
+            @Override
+            public void selectionChanged(SearchParametersSelectionEvent event) {
+                //Clear old bands
+                for (UUID id : currentlySearchBands) {
+                    freqComponent.removeBand(id);
+                }
+                currentlySearchBands.clear();
+                
+                //Add new bands
+                for (FrequencyBand band : event.getNewlySelectedSearchParameters().getSearchBands()) {
+                    UUID id = freqComponent.addSearchBand(band);
+                    currentlySearchBands.add(id);
+                }
+            }
+        });
+        JComponent spList = spDisplay.getListComponent();
+        JComponent spEditor = spDisplay.getEditorComponent();
+        JPanel searchParamsPanel = new JPanel(new BorderLayout());
+        searchParamsPanel.add(spList, BorderLayout.CENTER);
+        searchParamsPanel.add(spEditor, BorderLayout.NORTH);
+        
+        m_frame.add(searchParamsPanel, BorderLayout.EAST);
         
         //Control panel
         JPanel controlPanel = new JPanel();
@@ -103,8 +135,8 @@ public class AppView implements View {
                 try {
                     int freq = Integer.valueOf(freqField.getText());
                     int bw = Integer.valueOf(bwField.getText());
-                    FrequencyBand band = new FrequencyBand(freq, bw);
-                    freqComponent.addBand(band);
+                    FrequencyBand band = new FrequencyBand(freq, bw, 40);
+                    freqComponent.addTargetBand(band);
                 } catch (NumberFormatException ex) {
                     // ignore
                 }
@@ -156,7 +188,7 @@ public class AppView implements View {
 
     @Override
     public void removePlatformFromList(Platform platform) {
-        
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
     @Override

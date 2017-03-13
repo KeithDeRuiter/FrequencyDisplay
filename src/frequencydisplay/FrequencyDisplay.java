@@ -6,9 +6,12 @@
 package frequencydisplay;
 
 import frequencydisplay.controller.DisplayController;
+import frequencydisplay.data.Platform;
 import frequencydisplay.model.AppModel;
+import frequencydisplay.model.CsvPlatformModelLoader;
 import frequencydisplay.model.Model;
 import frequencydisplay.view.AppView;
+import java.util.List;
 
 /**
  *
@@ -30,6 +33,12 @@ public class FrequencyDisplay {
         //Controller
         DisplayController controller = new DisplayController(model, view);
         controller.launch();
+        
+        List<Platform> database = CsvPlatformModelLoader.loadPlatformsFromFile("Sonar_Profiles_LWAMI_311.csv");
+        for (Platform p : database) {
+            model.addPlatform(p);
+        }
+        
     }
     
 }

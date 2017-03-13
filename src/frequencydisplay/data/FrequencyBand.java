@@ -12,10 +12,12 @@ package frequencydisplay.data;
 public class FrequencyBand {
     private final int m_centerFreq;
     private final int m_bandwidth;
+    private final int m_intensity;
 
-    public FrequencyBand(int centerFreq, int bandwidth) {
+    public FrequencyBand(int centerFreq, int bandwidth, int intensity) {
         m_centerFreq = centerFreq;
         m_bandwidth = bandwidth;
+        m_intensity = intensity;
     }
     
     public int getCenterFreq() {
@@ -34,8 +36,14 @@ public class FrequencyBand {
         return m_centerFreq + m_bandwidth / 2;
     }
 
+    public int getIntensity() {
+        return m_intensity;
+    }
+
     @Override
     public String toString() {
-        return "FrequencyBand{" + "m_centerFreq=" + m_centerFreq + ", m_bandwidth=" + m_bandwidth + '}';
+        return "FrequencyBand{" + "m_centerFreq=" + m_centerFreq + ", m_bandwidth=" + m_bandwidth + ", m_intensity=" + m_intensity + '}';
     }
+    
+    
 }

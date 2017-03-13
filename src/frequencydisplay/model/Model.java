@@ -6,6 +6,8 @@
 package frequencydisplay.model;
 
 import frequencydisplay.data.Platform;
+import frequencydisplay.data.SearchParameters;
+import java.util.List;
 
 /**
  *
@@ -16,7 +18,8 @@ public interface Model {
     public void removeModelListener(ModelListener listener);
     public void addPlatform(Platform p);
     public void removePlatform(Platform p);
-    public void addSearchParameters();
-    public void removeSearchParameters();
-    
+    public void addSearchParameters(SearchParameters params);
+    public void removeSearchParameters(SearchParameters params);
+    public List<Platform> getAllPlatforms();
+    public List<SearchParameters> getAllSearchParameters();
 }

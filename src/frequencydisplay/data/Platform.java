@@ -5,7 +5,7 @@
  */
 package frequencydisplay.data;
 
-import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 /**
@@ -38,11 +38,11 @@ public class Platform {
     }
 
     public List<String> getCountries() {
-        return m_countries;
+        return Collections.unmodifiableList(m_countries);
     }
 
     public List<Integer> getFrequencies() {
-        return m_frequencies;
+        return Collections.unmodifiableList(m_frequencies);
     }
 
     public int getNumBlades() {

@@ -3,12 +3,12 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package frequencydisplay.display;
+package frequencydisplay.view.display;
 
 /**
  *
  * @author Keith
  */
 public interface PlatformSelectionListener {
-    public void platformSelectionChanged(PlatformSelectionEvent event);
+    public void selectionChanged(PlatformSelectionEvent event);
 }

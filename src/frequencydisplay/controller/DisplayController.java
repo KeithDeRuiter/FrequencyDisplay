@@ -6,7 +6,7 @@
 package frequencydisplay.controller;
 
 import frequencydisplay.data.Platform;
-import frequencydisplay.data.SamplePlatformDatabase;
+import frequencydisplay.data.SearchParameters;
 import frequencydisplay.model.Model;
 import frequencydisplay.model.ModelListener;
 import frequencydisplay.view.View;
@@ -29,9 +29,6 @@ public class DisplayController implements ModelListener {
     public void launch() {
         m_model.addModelListener(this);
         
-        m_model.addPlatform(SamplePlatformDatabase.A_CLASS);
-        m_model.addPlatform(SamplePlatformDatabase.B_CLASS);
-        
         m_view.showView();
     }
 
@@ -46,13 +43,13 @@ public class DisplayController implements ModelListener {
     }
 
     @Override
-    public void searchParametersAdded() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    public void searchParametersAdded(final SearchParameters searchParameters) {
+        
     }
 
     @Override
-    public void searchParametersRemoved() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    public void searchParametersRemoved(final SearchParameters searchParameters) {
+        
     }
     
 }

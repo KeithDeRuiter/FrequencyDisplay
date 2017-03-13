@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package frequencydisplay.display;
+package frequencydisplay.view.display;
 
 import frequencydisplay.data.Platform;
 import java.util.ArrayList;
@@ -19,7 +19,7 @@ import javax.swing.event.ListSelectionListener;
  *
  * @author Keith
  */
-public class PlatformTable {
+public class PlatformTableDisplay {
     
     private JScrollPane m_pane;
     private JTable m_table;
@@ -27,7 +27,7 @@ public class PlatformTable {
 
     private final List<PlatformSelectionListener> m_listeners;
     
-    public PlatformTable() {
+    public PlatformTableDisplay() {
         m_listeners = new ArrayList<>();
     }
     
@@ -95,7 +95,7 @@ public class PlatformTable {
     
     private void notifyOfSelectionChange(PlatformSelectionEvent event) {
         for (PlatformSelectionListener l : m_listeners) {
-            l.platformSelectionChanged(event);
+            l.selectionChanged(event);
         }
     }
     

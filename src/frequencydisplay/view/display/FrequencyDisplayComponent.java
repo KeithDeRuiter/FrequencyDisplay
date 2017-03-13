@@ -3,19 +3,21 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package frequencydisplay.display;
+package frequencydisplay.view.display;
 
 import frequencydisplay.data.FrequencyBand;
 import java.awt.Color;
 import java.awt.FontMetrics;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
+import java.awt.RenderingHints;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.geom.Point2D;
 import java.awt.geom.Rectangle2D;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.UUID;
 import javax.swing.JComponent;
 
 /**
@@ -29,16 +31,31 @@ public class FrequencyDisplayComponent {
     }
     
     public void initialize() {
-        m_component = new JFrequencyDisplay(0, 1000);
+        m_component = new JFrequencyDisplay(0, 2000);
     }
     
-    public void addBand(FrequencyBand band) {
-        System.out.println("Display Adding band: " + band);
-        m_component.addBand(band);
+    public UUID addTargetBand(FrequencyBand band) {
+        int startFreq = band.getStartFreq();
+        int endFreq = band.getEndFreq();
+        Color color = Color.GREEN;
+        boolean visible = true;
+        RenderableBandConfig config = new RenderableBandConfig(startFreq, endFreq, band.getIntensity(), color, visible);
+        UUID id = m_component.addBand(config);
+        return id;
     }
     
-    public void removeBand(FrequencyBand band) {
-        m_component.removeBand(band);
+    public UUID addSearchBand(FrequencyBand band) {
+        int startFreq = band.getStartFreq();
+        int endFreq = band.getEndFreq();
+        Color color = new Color(255, 255, 0, 120);
+        boolean visible = true;
+        RenderableBandConfig config = new RenderableBandConfig(startFreq, endFreq, band.getIntensity(), color, visible);
+        UUID id = m_component.addBand(config);
+        return id;
+    }
+    
+    public void removeBand(UUID id) {
+        m_component.removeBand(id);
     }
     
     public void clearAllBands() {
@@ -50,12 +67,9 @@ public class FrequencyDisplayComponent {
     }
     
     
-    
     private class JFrequencyDisplay extends JComponent {
 
         private static final String LABEL = "Frequency (Hz)";
-        
-        private static final int BAND_HEIGHT = 50;
         private static final int TICK_HEIGHT = 4;
         
         private final int m_lowerFreqBound;
@@ -63,7 +77,7 @@ public class FrequencyDisplayComponent {
         private final int m_lowerIntensityBound;
         private final int m_upperIntensityBound;
         
-        private List<FrequencyBand> m_bands;
+        private final Map<UUID, RenderableBandConfig> m_bands;
         
         
         public JFrequencyDisplay(int lowerBound, int upperBound) {
@@ -72,7 +86,7 @@ public class FrequencyDisplayComponent {
             m_lowerIntensityBound = 0;
             m_upperIntensityBound = 100;
             
-            m_bands = new ArrayList<>();
+            m_bands = new HashMap<>();
             
             addMouseListener(new MouseAdapter() {
                 @Override
@@ -83,15 +97,16 @@ public class FrequencyDisplayComponent {
             });
         }
         
-        public void addBand(FrequencyBand band) {
-            System.out.println("Adding band to display: " + band);
-            m_bands.add(band);
+        public UUID addBand(RenderableBandConfig band) {
+            UUID id = UUID.randomUUID();
+            m_bands.put(id, band);
             repaint();
+            return id;
         }
         
-        public void removeBand(FrequencyBand band) {
-            System.out.println("Removing band from display: " + band);
-            m_bands.remove(band);
+        public void removeBand(UUID id) {
+            RenderableBandConfig config = m_bands.remove(id);
+            System.out.println("Removing band from display: " + config);
             repaint();
         }
         
@@ -105,6 +120,8 @@ public class FrequencyDisplayComponent {
         protected void paintComponent(Graphics g) {
             super.paintComponent(g);
             Graphics2D g2d = (Graphics2D)g;
+            g2d.setRenderingHint(RenderingHints.KEY_TEXT_ANTIALIASING, RenderingHints.VALUE_TEXT_ANTIALIAS_ON);
+            g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
             
             int width = getWidth();
             int height = getHeight();
@@ -159,13 +176,54 @@ public class FrequencyDisplayComponent {
             g2d.scale(horizScaleFactor, vertScaleFactor);
             
             //Draw Bands
-            for (FrequencyBand band : m_bands) {
-                System.out.println("Drawing band: " + band);
-                g2d.setColor(Color.GREEN);
-                g2d.fillRect(band.getStartFreq(), virtualGraphHeight - BAND_HEIGHT, band.getBandwidth(), 50);
+            for (RenderableBandConfig band : m_bands.values()) {
+                if (band.isVisible()) {
+                    System.out.println("Drawing band: " + band);
+                    g2d.setColor(band.getColor());
+                    g2d.fillRect(band.getBeginFreq(), virtualGraphHeight - band.getLevel(), band.getWidth(), band.getLevel());
+                }
             }
         }
+    }
+    
+    private class RenderableBandConfig {
+        private int beginFreq;
+        private int endFreq;
+        private int level;
+        private Color color;
+        private boolean visible;
+
+        public RenderableBandConfig(int beginFreq, int endFreq, int level, Color color, boolean visible) {
+            this.beginFreq = beginFreq;
+            this.endFreq = endFreq;
+            this.level = level;
+            this.color = color;
+            this.visible = visible;
+        }
+
+        public int getBeginFreq() {
+            return beginFreq;
+        }
+
+        public int getEndFreq() {
+            return endFreq;
+        }
+
+        public int getLevel() {
+            return level;
+        }
         
+        public int getWidth() {
+            return Math.abs(beginFreq - endFreq);
+        }
+
+        public Color getColor() {
+            return color;
+        }
+
+        public boolean isVisible() {
+            return visible;
+        }
     }
     
 }
