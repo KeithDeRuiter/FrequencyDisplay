@@ -17,29 +17,29 @@ import frequencydisplay.view.View;
  */
 public class DisplayController implements ModelListener {
     
-    private final Model m_model;
-    private final View m_view;
+    private final Model model;
+    private final View view;
 
     public DisplayController(Model model, View view) {
-        m_model = model;
-        m_view = view;
+        this.model = model;
+        this.view = view;
         
     }
     
     public void launch() {
-        m_model.addModelListener(this);
+        model.addModelListener(this);
         
-        m_view.showView();
+        view.showView();
     }
 
     @Override
     public void platformAdded(Platform p) {
-        m_view.addPlatformToList(p);
+        view.addPlatformToList(p);
     }
 
     @Override
     public void platformRemoved(Platform p) {
-        m_view.removePlatformFromList(p);
+        view.removePlatformFromList(p);
     }
 
     @Override

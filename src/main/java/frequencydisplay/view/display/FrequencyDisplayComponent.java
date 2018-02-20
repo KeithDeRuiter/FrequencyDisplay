@@ -25,13 +25,13 @@ import javax.swing.JComponent;
  * @author Keith
  */
 public class FrequencyDisplayComponent {
-    JFrequencyDisplay m_component;
+    private JFrequencyDisplay component;
     
     public FrequencyDisplayComponent() {
     }
     
     public void initialize() {
-        m_component = new JFrequencyDisplay(0, 2000);
+        component = new JFrequencyDisplay(0, 2000);
     }
     
     public UUID addTargetBand(FrequencyBand band) {
@@ -40,7 +40,7 @@ public class FrequencyDisplayComponent {
         Color color = Color.GREEN;
         boolean visible = true;
         RenderableBandConfig config = new RenderableBandConfig(startFreq, endFreq, band.getIntensity(), color, visible);
-        UUID id = m_component.addBand(config);
+        UUID id = component.addBand(config);
         return id;
     }
     
@@ -50,20 +50,20 @@ public class FrequencyDisplayComponent {
         Color color = new Color(255, 255, 0, 120);
         boolean visible = true;
         RenderableBandConfig config = new RenderableBandConfig(startFreq, endFreq, band.getIntensity(), color, visible);
-        UUID id = m_component.addBand(config);
+        UUID id = component.addBand(config);
         return id;
     }
     
     public void removeBand(UUID id) {
-        m_component.removeBand(id);
+        component.removeBand(id);
     }
     
     public void clearAllBands() {
-        m_component.removeAllBands();
+        component.removeAllBands();
     }
     
     public JComponent getComponent() {
-        return m_component;
+        return component;
     }
     
     
@@ -92,7 +92,7 @@ public class FrequencyDisplayComponent {
                 @Override
                 public void mouseClicked(MouseEvent e) {
                     super.mouseMoved(e);
-                    System.out.println("Mouse at: <" + e.getX() + ", " + e.getY() + ">");
+                    //System.out.println("Mouse at: <" + e.getX() + ", " + e.getY() + ">");
                 }
             });
         }
@@ -106,12 +106,12 @@ public class FrequencyDisplayComponent {
         
         public void removeBand(UUID id) {
             RenderableBandConfig config = m_bands.remove(id);
-            System.out.println("Removing band from display: " + config);
+            //System.out.println("Removing band from display: " + config);
             repaint();
         }
         
         public void removeAllBands() {
-            System.out.println("Removing all bands from display");
+            //System.out.println("Removing all bands from display");
             m_bands.clear();
             repaint();
         }
@@ -144,8 +144,8 @@ public class FrequencyDisplayComponent {
             float horizScaleFactor = (float)width / (float)virtualGraphWidth;
             float vertScaleFactor = (float)(graphBottomEdge) / (float)virtualGraphHeight;
             
-            System.out.println("hScale: " + horizScaleFactor);
-            System.out.println("vScale: " + vertScaleFactor);
+            //System.out.println("hScale: " + horizScaleFactor);
+            //System.out.println("vScale: " + vertScaleFactor);
             
             //Blank graph area
             g2d.setColor(Color.BLACK);
@@ -161,7 +161,7 @@ public class FrequencyDisplayComponent {
                 //render the text while still under initial transform so the words are not stretched
                 g2d.drawString(String.valueOf(i), (int)textLocation.getX(), (int)textLocation.getY());
                 
-                System.out.println("Drawing string at: " + textLocation);
+                //System.out.println("Drawing string at: " + textLocation);
             }
             
             //Draw tick marks
@@ -178,7 +178,7 @@ public class FrequencyDisplayComponent {
             //Draw Bands
             for (RenderableBandConfig band : m_bands.values()) {
                 if (band.isVisible()) {
-                    System.out.println("Drawing band: " + band);
+                    //System.out.println("Drawing band: " + band);
                     g2d.setColor(band.getColor());
                     g2d.fillRect(band.getBeginFreq(), virtualGraphHeight - band.getLevel(), band.getWidth(), band.getLevel());
                 }

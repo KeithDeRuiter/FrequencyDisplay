@@ -10,5 +10,5 @@ package frequencydisplay.view;
  * @author Keith
  */
 public interface ViewListener {
-    
+    public void viewClosed();
 }

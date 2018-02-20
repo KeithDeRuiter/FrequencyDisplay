@@ -16,5 +16,14 @@ hs_err_pid*
 /dist/*
 /nbproject/private/*
 
+# Gradle project things
+.gradle
+/build
+/buildSrc/build
+/subprojects/*/build
+/subprojects/docs/src/samples/*/*/build
+/.nb-gradle-properties
+.nb-gradle/
+
 # Non-repo Application Directories
 /logs/*

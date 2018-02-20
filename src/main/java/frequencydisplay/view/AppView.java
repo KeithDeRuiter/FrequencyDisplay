@@ -16,17 +16,13 @@ import frequencydisplay.view.display.SearchParametersSelectionEvent;
 import frequencydisplay.view.display.SearchParametersSelectionListener;
 import java.awt.BorderLayout;
 import java.awt.Dimension;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.text.NumberFormat;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
-import javax.swing.JButton;
 import javax.swing.JComponent;
-import javax.swing.JFormattedTextField;
 import javax.swing.JFrame;
-import javax.swing.JLabel;
 import javax.swing.JPanel;
 
 /**
@@ -35,33 +31,45 @@ import javax.swing.JPanel;
  */
 public class AppView implements View {
     
-    private JFrame m_frame;
+    private JFrame frame;
     private final String WINDOW_TITLE = "Frequency Display";
 
     private FrequencyDisplayComponent freqComponent;
     private PlatformTableDisplay table;
     
+    private final List<ViewListener> listeners;
+    
     public AppView() {
+        listeners = new ArrayList<>();
     }
     
     @Override
     public void initialize() {
-        m_frame = new JFrame(WINDOW_TITLE);
-        m_frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        m_frame.setPreferredSize(new Dimension(1200, 500));
-        m_frame.setLayout(new BorderLayout());
+        frame = new JFrame(WINDOW_TITLE);
+        frame.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
+        frame.addWindowListener(new WindowAdapter() {
+            @Override
+            public void windowClosing(WindowEvent e) {
+                listeners.forEach((listener) -> {
+                    listener.viewClosed();
+                });
+                frame.dispose();
+            }
+        });
+        frame.setPreferredSize(new Dimension(1200, 500));
+        frame.setLayout(new BorderLayout());
         
         //Frequency display
         freqComponent = new FrequencyDisplayComponent();
         freqComponent.initialize();
         JComponent fd = freqComponent.getComponent();
         fd.setPreferredSize(new Dimension(500, 100));
-        m_frame.add(fd, BorderLayout.SOUTH);
+        frame.add(fd, BorderLayout.SOUTH);
         
         //Table
         table = new PlatformTableDisplay();
         table.initialize();
-        m_frame.add(table.getComponent(), BorderLayout.CENTER);
+        frame.add(table.getComponent(), BorderLayout.CENTER);
 
         //Add listener so bands wil be displayed when a platform is selected
         table.addPlatformSelectionListener(new PlatformSelectionListener() {
@@ -111,7 +119,7 @@ public class AppView implements View {
         searchParamsPanel.add(spList, BorderLayout.CENTER);
         searchParamsPanel.add(spEditor, BorderLayout.NORTH);
         
-        m_frame.add(searchParamsPanel, BorderLayout.EAST);
+        frame.add(searchParamsPanel, BorderLayout.EAST);
         
 //        //Control panel
 //        JPanel controlPanel = new JPanel();
@@ -172,13 +180,13 @@ public class AppView implements View {
     
     @Override
     public void showView() {
-        m_frame.pack();
-        m_frame.setVisible(true);
+        frame.pack();
+        frame.setVisible(true);
     }
     
     @Override
     public void hideView() {
-        m_frame.setVisible(false);
+        frame.setVisible(false);
     }
 
     @Override
@@ -199,5 +207,15 @@ public class AppView implements View {
     @Override
     public void removeSearchParametersFromList() {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public void addViewListener(ViewListener listener) {
+        listeners.add(listener);
+    }
+
+    @Override
+    public void removeViewListener(ViewListener listener) {
+        listeners.remove(listener);
     }
 }

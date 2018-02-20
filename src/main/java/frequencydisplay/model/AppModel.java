@@ -19,97 +19,110 @@ import java.util.concurrent.ScheduledExecutorService;
  */
 public class AppModel implements Model {
 
-    private final List<Platform> m_platformList;
-    private final List<SearchParameters> m_searchParametersList;
-    private final List<ModelListener> m_modelListeners;
+    private final List<Platform> platformList;
+    private final List<SearchParameters> searchParametersList;
+    private final List<ModelListener> modelListeners;
 
-    private final ScheduledExecutorService m_notifier;
+    private final ScheduledExecutorService notifier;
     
     public AppModel() {
-        m_platformList = Collections.synchronizedList(new ArrayList<>());
-        m_searchParametersList = Collections.synchronizedList(new ArrayList<>());
-        m_modelListeners = new ArrayList<>();
-        m_notifier = Executors.newSingleThreadScheduledExecutor();
+        platformList = Collections.synchronizedList(new ArrayList<>());
+        searchParametersList = Collections.synchronizedList(new ArrayList<>());
+        modelListeners = new ArrayList<>();
+        notifier = Executors.newSingleThreadScheduledExecutor();
     }
     
     
     @Override
     public void addModelListener(ModelListener listener) {
-        m_modelListeners.add(listener);
+        modelListeners.add(listener);
     }
     
     @Override
     public void removeModelListener(ModelListener listener) {
-        m_modelListeners.remove(listener);
+        modelListeners.remove(listener);
     }
 
     @Override
     public void addPlatform(Platform p) {
-        m_platformList.add(p);
+        platformList.add(p);
         notifyPlatformAdd(p);
     }
 
     @Override
     public void removePlatform(Platform p) {
-        m_platformList.remove(p);
+        platformList.remove(p);
         notifyPlatformRemove(p);
     }
 
     @Override
     public void addSearchParameters(SearchParameters params) {
-        m_searchParametersList.add(params);
+        searchParametersList.add(params);
         notifySearchParametersAdd(params);
     }
 
     @Override
     public void removeSearchParameters(SearchParameters params) {
-        m_searchParametersList.remove(params);
+        searchParametersList.remove(params);
         notifySearchParametersRemove(params);
     }
 
     @Override
     public List<Platform> getAllPlatforms() {
-        return Collections.unmodifiableList(m_platformList);
+        return Collections.unmodifiableList(platformList);
     }
 
     @Override
     public List<SearchParameters> getAllSearchParameters() {
-        return Collections.unmodifiableList(m_searchParametersList);
+        return Collections.unmodifiableList(searchParametersList);
     }
     
     private void notifyPlatformAdd(Platform p) {
         Runnable task = () -> {
-            for (ModelListener l : m_modelListeners) {
+            for (ModelListener l : modelListeners) {
                 l.platformAdded(p);
             }
         };
-        m_notifier.execute(task);
+        notifier.execute(task);
     }
     
     private void notifyPlatformRemove(Platform p) {
         Runnable task = () -> {
-            for (ModelListener l : m_modelListeners) {
+            for (ModelListener l : modelListeners) {
                 l.platformRemoved(p);
             }
         };
-        m_notifier.execute(task);
+        notifier.execute(task);
     }
     
     private void notifySearchParametersAdd(SearchParameters params) {
         Runnable task = () -> {
-            for (ModelListener l : m_modelListeners) {
+            for (ModelListener l : modelListeners) {
                 l.searchParametersAdded(params);
             }
         };
-        m_notifier.execute(task);
+        notifier.execute(task);
     }
     
     private void notifySearchParametersRemove(SearchParameters params) {
         Runnable task = () -> {
-            for (ModelListener l : m_modelListeners) {
+            for (ModelListener l : modelListeners) {
                 l.searchParametersRemoved(params);
             }
         };
-        m_notifier.execute(task);
+        notifier.execute(task);
+    }
+
+    @Override
+    public Platform getPlatformByName(String name) {
+        if (name == null) {
+            throw new IllegalArgumentException("Cannot get platform by name, name was null!");
+        }
+        for (Platform p : getAllPlatforms()) {
+            if (name.equals(p.getPlatformClass())) {
+                return p;
+            }
+        }
+        return null;
     }
 }

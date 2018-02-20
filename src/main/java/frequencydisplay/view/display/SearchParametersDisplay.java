@@ -85,6 +85,8 @@ public class SearchParametersDisplay {
                     // Single selection, so only one index will be selected
                     int minIndex = lsm.getMinSelectionIndex();
                     newSelection = parameterListModel.getElementAt(minIndex);
+                } else {
+                    return;
                 }
                 
                 //Update labels

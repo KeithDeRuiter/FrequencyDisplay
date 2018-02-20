@@ -22,4 +22,5 @@ public interface Model {
     public void removeSearchParameters(SearchParameters params);
     public List<Platform> getAllPlatforms();
     public List<SearchParameters> getAllSearchParameters();
+    public Platform getPlatformByName(String name);
 }

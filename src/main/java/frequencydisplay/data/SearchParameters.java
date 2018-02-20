@@ -14,20 +14,20 @@ import java.util.List;
  * @author Keith
  */
 public class SearchParameters {
-    private final String m_name;
-    private final List<FrequencyBand> m_searchBands;
+    private final String name;
+    private final List<FrequencyBand> searchBands;
 
     private SearchParameters(String name, List<FrequencyBand> searchBands) {
-        m_name = name;
-        m_searchBands = searchBands;
+        this.name = name;
+        this.searchBands = searchBands;
     }
 
     public String getName() {
-        return m_name;
+        return name;
     }
 
     public List<FrequencyBand> getSearchBands() {
-        return Collections.unmodifiableList(m_searchBands);
+        return Collections.unmodifiableList(searchBands);
     }
     
     

@@ -12,6 +12,8 @@ import frequencydisplay.data.Platform;
  * @author Keith
  */
 public interface View {
+    public void addViewListener(ViewListener listener);
+    public void removeViewListener(ViewListener listener);
     public void initialize();
     public void showView();
     public void hideView();

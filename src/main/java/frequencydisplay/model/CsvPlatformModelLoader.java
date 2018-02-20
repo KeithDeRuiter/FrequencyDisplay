@@ -13,6 +13,8 @@ import java.nio.file.Files;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  *
@@ -31,6 +33,15 @@ public class CsvPlatformModelLoader {
     private static final int TPK_INDEX = 9;
     private static final int ALT_NAME_INDEX = 10;
     
+    
+    public static List<Platform> loadPlatformsFromFile(File file) {
+        try {
+            return CsvPlatformModelLoader.loadPlatformsFromFile(file.getCanonicalPath());
+        } catch (IOException ex) {
+            System.out.println("Could not resolve canonical path for file: " + file.getPath());
+            return new ArrayList<>();
+        }
+    }
     
     public static List<Platform> loadPlatformsFromFile(String filename) {
         List<Platform> data = new ArrayList<>();
@@ -68,6 +79,8 @@ public class CsvPlatformModelLoader {
             }
         } catch (IOException x) {
             System.err.format("Error loading file, IOException: %s%n", x);
+            File fileTouch = new File(filename);
+            System.out.println(fileTouch.getAbsolutePath());
         }
 
         return data;
