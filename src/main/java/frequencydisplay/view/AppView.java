@@ -54,6 +54,7 @@ public class AppView implements View {
                     listener.viewClosed();
                 });
                 frame.dispose();
+                System.exit(0);
             }
         });
         frame.setPreferredSize(new Dimension(1200, 500));

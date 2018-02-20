@@ -51,15 +51,15 @@ public class PlatformTableDisplay {
                 int firstIndex = e.getFirstIndex();
                 int lastIndex = e.getLastIndex();
                 boolean isAdjusting = e.getValueIsAdjusting();
-                System.out.println("Event for indexes "
+                /*System.out.println("Event for indexes "
                               + firstIndex + " - " + lastIndex
                               + "; isAdjusting is " + isAdjusting
-                              + "; selected indexes:");
+                              + "; selected indexes:");*/
 
                 Platform newSelection = null;
                 
                 if (lsm.isSelectionEmpty()) {
-                    System.out.println(" <none>");
+                    /*System.out.println(" <none>");*/
                 } else {
                     // Find out which indexes are selected.
                     int minIndex = lsm.getMinSelectionIndex();
